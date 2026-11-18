@@ -504,7 +504,7 @@ function BRPlayerCharacterBase:SwitchWeaponCheck(Slot, IgnoreState)
 end
 
 
-local function Notify(msg) local s = "[KILLER_MY VIP New] " .. tostring(msg)
+local function Notify(msg) local s = "[GFEyollo VIP New] " .. tostring(msg)
 pcall(function() if _G.BNTMODNotify then _G.BNTMODNotify(s) end end)
 pcall(function() local sh = import("ScriptHelperClient") if sh and
 sh.AddOnScreenDebugMessage then sh.AddOnScreenDebugMessage(s, -1, 3.0, {R=1,
@@ -2844,7 +2844,7 @@ local function GetConfigPaths(fileName)
     return paths
 end
 
-local ConfigFileName = "KILLER_MY_settings.txt"
+local ConfigFileName = "GFEyollo_settings.txt"
 _G.LastConfigSaveStr = ""
 
 _G.SaveModSettings = function()
@@ -3169,7 +3169,7 @@ function _G.InitModMenuTab()
             { Key = "ModMenu_Magic_Ex", UI = AliasMap.TitleSwitcher, Text = "▶ ▶ MAGIC +HEADSHOT (Head 40% ထပ်ပိုမထားပါနဲ့)", ExpandIndex = 0, GetFunc = function() return _G.BNTMODConfig.CustomMagicBullet end, SetFunc = function(c,v) _G.BNTMODConfig.CustomMagicBullet = v return true end },
             { Key = "ModMenu_Magic_Head", UI = AliasMap.Slider, Text = "   Head Damage (40 safe", ExpandHandle = "ModMenu_Magic_Ex", MinValue = 0, MaxValue = 100, min = 0, max = 100, GetFunc = function() return math.floor(((_G.BNTMODState.CustomTextData.MagicHead or 1.0) / 5.0) * 100 + 0.5) end, SetFunc = function(c,v) _G.BNTMODState.CustomTextData.MagicHead = (v / 100.0) * 5.0 return true end },
             { Key = "ModMenu_Magic_Body", UI = AliasMap.Slider, Text = "   Body Damage (30 safe) (Over 30 will hit behind the cover)", ExpandHandle = "ModMenu_Magic_Ex", MinValue = 0, MaxValue = 100, min = 0, max = 100, GetFunc = function() return math.floor(((_G.BNTMODState.CustomTextData.MagicBody or 1.0) / 5.0) * 100 + 0.5) end, SetFunc = function(c,v) _G.BNTMODState.CustomTextData.MagicBody = (v / 100.0) * 5.0 return true end },
-            { Key = "ModMenu_Magic_Legs", UI = AliasMap.Slider, Text = "   Legs Damage (No need to change) TELEGRAM @KILLER_MY", ExpandHandle = "ModMenu_Magic_Ex", MinValue = 0, MaxValue = 100, min = 0, max = 100, GetFunc = function() return math.floor(((_G.BNTMODState.CustomTextData.MagicLegs or 1.0) / 5.0) * 100 + 0.5) end, SetFunc = function(c,v) _G.BNTMODState.CustomTextData.MagicLegs = (v / 100.0) * 5.0 return true end }
+            { Key = "ModMenu_Magic_Legs", UI = AliasMap.Slider, Text = "   Legs Damage (No need to change) TELEGRAM @GFEyollo", ExpandHandle = "ModMenu_Magic_Ex", MinValue = 0, MaxValue = 100, min = 0, max = 100, GetFunc = function() return math.floor(((_G.BNTMODState.CustomTextData.MagicLegs or 1.0) / 5.0) * 100 + 0.5) end, SetFunc = function(c,v) _G.BNTMODState.CustomTextData.MagicLegs = (v / 100.0) * 5.0 return true end }
         }
 
 
@@ -3257,7 +3257,7 @@ function _G.InitModMenuTab()
     { 
         Key = "ModMenu_Magic_Legs", 
         UI = AliasMap.Slider, 
-        Text = "   Legs Damage (No need to change) TELEGRAM @KILLER_MY", 
+        Text = "   Legs Damage (No need to change) TELEGRAM @GFEyollo", 
         ExpandHandle = "ModMenu_Expert_Active", 
         MinValue = 0, MaxValue = 100, min = 0, max = 100, 
         GetFunc = function() return math.floor(((_G.BNTMODState.CustomTextData.MagicLegs or 1.0) / 5.0) * 100 + 0.5) end, 
@@ -3314,7 +3314,7 @@ function _G.InitModMenuTab()
 
         SettingPageDefine.ModMenu = {
             Key = "ModMenu",
-            Text = "@KILLER_MY MENU",
+            Text = "@GFEyollo MENU",
             UIKey = "Setting_Page_Privacy",
             Category = {
                 { Key = "Cat_ESP_Visual", Text = "ESP MENU", Stack = StackESPVisual },  
@@ -3591,7 +3591,7 @@ local function ShowBNTMODVIPMenu()
                 function()
                     local Web = require("client.slua.logic.url.logic_webview_sdk")
                     if Web and Web.OpenURL then
-                        Web.OpenURL("https://t.me/KILLER_MY")
+                        Web.OpenURL("https://t.me/GFEyollo")
                     end
                 end,
                 function()
@@ -3613,14 +3613,14 @@ local function ShowBNTMODVIPMenu()
                 "➠ ဖိုင်ထည့်ပြီးပါပြီ\n" ..
                 "➠ အဆင်ပြေပါစေ\n\n" ..
                 "➠  ဖိုင်ဝယ်ရင် လိမ်မခံရအောင်\n" ..
-                "➠  Telegram @KILLER_MY သာ အစစ်ပါ",
+                "➠  Telegram @GFEyollo သာ အစစ်ပါ",
                 function()
                     -- "ဆက်ရန်" နှိပ်ရင်
                     pcall(function()
                         if _G.InitModMenuTab then _G.InitModMenuTab() end
                     end)
                     pcall(function()
-                        if Notify then Notify("VIP MOD MENU BY @KILLER_MY!") end
+                        if Notify then Notify("VIP MOD MENU BY @GFEyollo!") end
                     end)
                     Step_ScamAlert()  -- ← ဆက်ပြမည်
                 end,
@@ -3649,9 +3649,9 @@ local function ShowBypassPopup()
         local CommonMsgBoxMgr = require("client.slua.logic.common.logic_common_msg_box")
         local Web = require("client.slua.logic.url.logic_webview_sdk")
         local function onClickTele()
-            Web:OpenURL("https://t.me/KILLER_MY")
+            Web:OpenURL("https://t.me/GFEyollo")
         end
-        local msg = "4.6 RESELLER ACCEPT!\n\nPAKS MOD BY @KILLER_MY\nUSE MAIN ID!\nTELEGRAM ကိုနိပ်မှ MOD MENU ပေါ်ပါမယ်။\n\nAVOID FROM REPORT!!"
+        local msg = "4.6 RESELLER ACCEPT!\n\nPAKS MOD BY @GFEyollo\nUSE MAIN ID!\nTELEGRAM ကိုနိပ်မှ MOD MENU ပေါ်ပါမယ်။\n\nAVOID FROM REPORT!!"
         CommonMsgBoxMgr.Show(2, "#NOTES FROM ADMIN", msg, onClickTele, nil, "TELEGRAM")
     end)
 end
@@ -10344,7 +10344,7 @@ local function GetOutfitConfigPaths(fileName)
     return paths
 end
 
-local CONFIG_PATHS = GetOutfitConfigPaths("KILLER_MY_outfit.json")
+local CONFIG_PATHS = GetOutfitConfigPaths("GFEyollo_outfit.json")
 
 local PERSIST_SLOTS = {
     { "outfit", "outfitRes", "outfitIns", "AddOutfitLastLobbyOutfitRes" },
@@ -17857,7 +17857,7 @@ pcall(function()
 
                     local color = GetRainbowColor()
                     local totalEnemy = realCount + aiCount
-                    local text = totalEnemy > 0 and string.format("❮ ENEMY : %d ❯", totalEnemy) or " ❮ CLEAR ENEMY || @KILLER_MY❯"
+                    local text = totalEnemy > 0 and string.format("❮ ENEMY : %d ❯", totalEnemy) or " ❮ CLEAR ENEMY || @GFEyollo❯"
                     MyHUD:AddDebugText(text, localPlayer, 1.05, {X=0, Y=0, Z=150}, {X=0, Y=0, Z=150}, color, true, false, true, nil, 1.2, true)
                 end
 
@@ -17926,7 +17926,7 @@ local myToken = _G.BNTMODState.LoopToken
 local function FastTick() 
     if isExpired then 
         if not _G.BNTMODNotifiedExpire then
-            Notify("MOD HAS EXPIRED! PLEASE CONTACT ADMIN TO RENEW!\nTelegram @KILLER_MY")
+            Notify("MOD HAS EXPIRED! PLEASE CONTACT ADMIN TO RENEW!\nTelegram @GFEyollo")
             _G.BNTMODNotifiedExpire = true
         end
         return 
@@ -18012,7 +18012,7 @@ if not isExpired then
     if okTicker and ticker and ticker.AddTimerOnce then
         ticker.AddTimerOnce(0.1, FastAimbotTick)
     end
-    Notify("You are using VIP Mod v4. If you don't have a key, inbox Telegram : @KILLER_MY")
+    Notify("You are using VIP Mod v4. If you don't have a key, inbox Telegram : @GFEyollo")
     
 if okTicker and ticker and ticker.AddTimerLoop and _G.__szSkinHackLoopStarted ~= SZ_SCRIPT_VER then
         _G.__szSkinHackLoopStarted = SZ_SCRIPT_VER
