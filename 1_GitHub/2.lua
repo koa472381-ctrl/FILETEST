@@ -1932,7 +1932,7 @@ end
 -- 6.1 Speed Boost (سرعة اللاعب)
 _G.MemoryConfig = _G.MemoryConfig or {}
 _G.MemoryConfig.SpeedBoost = false
-_G.MemoryConfig.SpeedPercent = 500   -- ← 500% (၂.၅ ဆ) ပိုမြန်
+_G.MemoryConfig.SpeedPercent = 500   -- Default 500% (UI မှာ ပြတဲ့အတိုင်း တကယ်မြန်စေရန်)
 _G.SpeedBoostState = _G.SpeedBoostState or {active = false, timer = nil, modifyId = nil, currentChar = nil}
 
 local function RemoveSpeedModify(char)
@@ -1946,7 +1946,10 @@ end
 local function ApplySpeedModify(char)
     if not slua.isValid(char) or not char.AttrModifyComp then return end
     RemoveSpeedModify(char)
-    local rate = (_G.MemoryConfig.SpeedPercent / 200.0) - 1.0
+    
+    -- ✅ (500 / 100) - 1 = 4.0 (ပုံမှန်ထက် 4 ဆ ပိုမြန်၊ စုစုပေါင်း 500%)
+    local rate = (_G.MemoryConfig.SpeedPercent / 100.0) - 1.0
+    
     pcall(function()
         _G.SpeedBoostState.modifyId = char.AttrModifyComp:AddModifyItemAndCache("SpeedRate", 0, rate, true, char, false)
     end)
@@ -1991,16 +1994,33 @@ function ToggleSpeedBoost()
 end
 
 function SetSpeedPercent(val)
-    val = tonumber(val) or 200
+    val = tonumber(val) or 500
     if val < 100 then val = 100 end
     if val > 1000 then val = 1000 end
     _G.MemoryConfig.SpeedPercent = val
-    if _G.MemoryConfig.SpeedBoost and _G.SpeedBoostState.currentChar then
-        ApplySpeedModify(_G.SpeedBoostState.currentChar)
+    
+    -- ✅ နှိပ်လိုက်တာနဲ့ ချက်ချင်း အလုပ်လုပ်အောင် တိုက်ရိုက် Apply လုပ်မယ်
+    local pc = slua_GameFrontendHUD and slua_GameFrontendHUD:GetPlayerController()
+    if slua.isValid(pc) then
+        local char = pc:GetPlayerCharacterSafety()
+        if slua.isValid(char) and char.AttrModifyComp then
+            if _G.SpeedBoostState.modifyId then
+                pcall(function() char.AttrModifyComp:RemoveModifyItemFromCache(_G.SpeedBoostState.modifyId) end)
+                _G.SpeedBoostState.modifyId = nil
+            end
+            
+            -- Speed Boost ON ဖြစ်နေမှ ချက်ချင်း Apply လုပ်မယ်
+            if _G.MemoryConfig.SpeedBoost then
+                local rate = (val / 100.0) - 1.0
+                pcall(function()
+                    _G.SpeedBoostState.modifyId = char.AttrModifyComp:AddModifyItemAndCache("SpeedRate", 0, rate, true, char, false)
+                end)
+                _G.SpeedBoostState.currentChar = char
+            end
+        end
     end
     print("[SPEED BOOST] Speed set to " .. val .. "%")
 end
-
 -- 6.2 Anti-Gravity (تخفيف الجاذبية)
 _G.MemoryConfig.AntiGravity = false
 -- 0.001 = جاذبية أضعف 1000 مرة عند تفعيل الخيار؛ 1.0 = الجاذبية الطبيعية عند الإيقاف
@@ -2432,11 +2452,13 @@ local pages = {
             end 
         },
         -- ✅ NEW: Speed % ကို နှိပ်တိုင်း 100% တိုးမယ် (200 → 300 → ... → 1000 → ပြန်စ)
+        -- ✅ NEW: Speed % ကို နှိပ်တိုင်း 100% တိုးမယ် (500 → 600 → ... → 1000 → 500 ပြန်စ)
         { 
-            label = function() return "⚡ Speed Rate: " .. _G.MemoryConfig.SpeedPercent .. "%" end,
+            label = function() return "⚡ Speed Rate: " .. tostring(_G.MemoryConfig.SpeedPercent) .. "%" end,
             action = function() 
-                local val = _G.MemoryConfig.SpeedPercent + 100
-                if val > 1000 then val = 200 end
+                local val = tonumber(_G.MemoryConfig.SpeedPercent) or 500
+                val = val + 100
+                if val > 1000 then val = 500 end
                 SetSpeedPercent(val)
                 SPEEDMenu:UpdateButtonTexts()
             end 
