@@ -1932,7 +1932,7 @@ end
 -- 6.1 Speed Boost (سرعة اللاعب)
 _G.MemoryConfig = _G.MemoryConfig or {}
 _G.MemoryConfig.SpeedBoost = false
-_G.MemoryConfig.SpeedPercent = 150
+_G.MemoryConfig.SpeedPercent = 200
 _G.SpeedBoostState = _G.SpeedBoostState or {active = false, timer = nil, modifyId = nil, currentChar = nil}
 
 local function RemoveSpeedModify(char)
@@ -1946,7 +1946,7 @@ end
 local function ApplySpeedModify(char)
     if not slua.isValid(char) or not char.AttrModifyComp then return end
     RemoveSpeedModify(char)
-    local rate = (_G.MemoryConfig.SpeedPercent / 100.0) - 1.0
+    local rate = (_G.MemoryConfig.SpeedPercent / 200.0) - 1.0
     pcall(function()
         _G.SpeedBoostState.modifyId = char.AttrModifyComp:AddModifyItemAndCache("SpeedRate", 0, rate, true, char, false)
     end)
