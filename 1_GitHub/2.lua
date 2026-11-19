@@ -1932,7 +1932,7 @@ end
 -- 6.1 Speed Boost (سرعة اللاعب)
 _G.MemoryConfig = _G.MemoryConfig or {}
 _G.MemoryConfig.SpeedBoost = false
-_G.MemoryConfig.SpeedPercent = 200
+_G.MemoryConfig.SpeedPercent = 500   -- ← 500% (၂.၅ ဆ) ပိုမြန်
 _G.SpeedBoostState = _G.SpeedBoostState or {active = false, timer = nil, modifyId = nil, currentChar = nil}
 
 local function RemoveSpeedModify(char)
@@ -1991,10 +1991,14 @@ function ToggleSpeedBoost()
 end
 
 function SetSpeedPercent(val)
+    val = tonumber(val) or 200
+    if val < 100 then val = 100 end
+    if val > 1000 then val = 1000 end
     _G.MemoryConfig.SpeedPercent = val
     if _G.MemoryConfig.SpeedBoost and _G.SpeedBoostState.currentChar then
         ApplySpeedModify(_G.SpeedBoostState.currentChar)
     end
+    print("[SPEED BOOST] Speed set to " .. val .. "%")
 end
 
 -- 6.2 Anti-Gravity (تخفيف الجاذبية)
@@ -2418,11 +2422,22 @@ local pages = {
         { label = "📢 Channel: BABYNOOB9", action = function() end },
     }},
     -- Page 4: Unsafe Challenges
+    -- Page 4: Unsafe Challenges
     { title = "🔥 Unsafe Challenges", features = {
         { 
             label = function() return _G.MemoryConfig.SpeedBoost and "🚀 Player Speed: ON (" .. _G.MemoryConfig.SpeedPercent .. "%)" or "🚀 Player Speed: OFF" end,
             action = function() 
                 ToggleSpeedBoost()
+                SPEEDMenu:UpdateButtonTexts()
+            end 
+        },
+        -- ✅ NEW: Speed % ကို နှိပ်တိုင်း 100% တိုးမယ် (200 → 300 → ... → 1000 → ပြန်စ)
+        { 
+            label = function() return "⚡ Speed Rate: " .. _G.MemoryConfig.SpeedPercent .. "%" end,
+            action = function() 
+                local val = _G.MemoryConfig.SpeedPercent + 100
+                if val > 1000 then val = 200 end
+                SetSpeedPercent(val)
                 SPEEDMenu:UpdateButtonTexts()
             end 
         },
